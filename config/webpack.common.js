@@ -30,7 +30,7 @@ const common = {
     rules: [
       // Check for TypeScript files
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         use: ['ts-loader'],
       },
       // Help webpack in understanding CSS files imported in .js files
