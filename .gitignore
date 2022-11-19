@@ -5,6 +5,7 @@
 
 # production
 /build
+build.pem
 
 # misc
 .DS_Store

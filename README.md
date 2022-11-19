@@ -1,4 +1,4 @@
-# <img src="public/icons/icon_48.png" width="45" align="left"> Extension Omegle
+# <img src="public/icons/icon_128.png" width="45" align="left"> Omegle Automator
 
 My Chrome Extension
 
@@ -18,4 +18,3 @@ Suggestions and pull requests are welcomed!.
 ---
 
 This project was bootstrapped with [Chrome Extension CLI](https://github.com/dutiyesh/chrome-extension-cli)
-
