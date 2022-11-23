@@ -11,6 +11,12 @@ const getMessages = () => {
     return (value ? JSON.parse(value) : []) as MessageArray;
 };
 
+const getStartWaitSecs = () => {
+    const value = localStorage.getItem(LocalStorageKey.START_WAIT_SECS);
+
+    return (value ? JSON.parse(value) : 0) as number;
+};
+
 const getWaitSecs = () => {
     const value = localStorage.getItem(LocalStorageKey.WAIT_SECS);
 
@@ -81,6 +87,16 @@ const startSession = () => {
     ).click();
 };
 
+const clickNewButton = () => {
+    const button = document.querySelector(
+        'button.disconnectbtn'
+    ) as HTMLButtonElement;
+
+    if (!button.childNodes?.[0]?.textContent?.includes('New')) return;
+
+    button?.click();
+};
+
 const canType = () => {
     if (!isInChat()) return false;
     return !(document.querySelector('textarea.chatmsg') as HTMLTextAreaElement)
@@ -92,7 +108,8 @@ const canType = () => {
  */
 const waitToType = async (): Promise<void> => {
     if (canType()) return;
-    await sleep(1);
+    // wait for just a quarter of a second before clicking again
+    await sleep(0.5);
     return waitToType();
 };
 
@@ -119,7 +136,7 @@ const sendMessages = async function* () {
     ) as HTMLButtonElement;
 
     for (let i = 1; i <= 3; i++) {
-        await sleep(1);
+        await sleep(0.25);
         quit.click();
     }
     yield 'END';
@@ -162,8 +179,12 @@ const Automator = memo(() => {
             // Check on every iteration whether or not the sequence has
             // been cancelled.
             while (!cancelled) {
+                // If the "New" button is present, click it.
+                clickNewButton();
                 // Wait for an open chat
                 await waitToType();
+                // Wait for the number of user-provided pre-chat wait seconds.
+                await sleep(getStartWaitSecs());
 
                 // Send messages
                 for await (const x of sendMessages()) {

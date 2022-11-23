@@ -107,7 +107,12 @@ const Messages = memo(() => {
                     onChange={handleChange}
                     style={{ maxHeight: '200px', minHeight: '50px' }}
                 />
-                <Button type="submit" label="Add" disabled={!value} />
+                <Button
+                    type="submit"
+                    label="Add"
+                    disabled={!value}
+                    style={{ maxHeight: '50px' }}
+                />
             </Form>
             <Box
                 wrap
@@ -144,7 +149,10 @@ const Messages = memo(() => {
                             <Paragraph
                                 data-index={index}
                                 margin="none"
-                                style={{ width: '100%' }}
+                                style={{
+                                    width: '100%',
+                                    wordBreak: 'break-all',
+                                }}
                             >
                                 {text}
                             </Paragraph>

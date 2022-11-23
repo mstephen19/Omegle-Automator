@@ -3,4 +3,5 @@ export const enum LocalStorageKey {
     MESSAGES = 'automator-messages',
     TAB = 'automator-active-tab',
     WAIT_SECS = 'automator-wait-secs',
+    START_WAIT_SECS = 'automator-start-wait-secs',
 }

@@ -1,6 +1,6 @@
 import Draggable from 'react-draggable';
 import { useState, useCallback } from 'react';
-import { Card, Header, Text, Button } from 'grommet';
+import { Card, Header, Text, Button, Tip } from 'grommet';
 import { Close, Add } from 'grommet-icons';
 import { useLocalStorage } from '../hooks';
 
@@ -44,17 +44,31 @@ const DraggableBox = ({
 
     return (
         <>
-            <Button
-                primary
-                style={{
-                    position: 'fixed',
-                    zIndex: 9e8,
-                    top: '25px',
-                    left: '25px',
-                }}
-                label="Find widget"
-                onClick={() => setPositions(defaultPositions)}
-            />
+            <Tip
+                content={
+                    <Text
+                        textAlign="center"
+                        style={{
+                            maxWidth: '250px',
+                        }}
+                    >
+                        Lost the widget somehow? Click this button to move it
+                        back to its original position!
+                    </Text>
+                }
+            >
+                <Button
+                    primary
+                    style={{
+                        position: 'fixed',
+                        zIndex: 9e7,
+                        top: '25px',
+                        left: '25px',
+                    }}
+                    label="Find widget"
+                    onClick={() => setPositions(defaultPositions)}
+                />
+            </Tip>
             <Draggable
                 handle=".drag-handle"
                 defaultPosition={positions}
@@ -66,13 +80,15 @@ const DraggableBox = ({
                 <Card
                     style={{
                         position: 'fixed',
-                        zIndex: 9e9,
+                        zIndex: 9e8,
                         width: '350px',
                         height: 'auto',
                         maxHeight: '500px',
                         boxShadow: '0px 0px 4px',
+                        overflow: 'visible',
                     }}
                     background="light"
+                    animation="fadeIn"
                 >
                     <Header
                         className="drag-handle"
@@ -82,6 +98,8 @@ const DraggableBox = ({
                             width: '100%',
                             minHeight: '50px',
                             height: '50px',
+                            borderTopLeftRadius: 'inherit',
+                            borderTopRightRadius: 'inherit',
                         }}
                         background="grey"
                         flex

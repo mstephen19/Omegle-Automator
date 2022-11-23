@@ -49,6 +49,7 @@ const Interests = memo(() => {
                     placeholder="ex. youtube"
                     value={value}
                     onChange={handleChange}
+                    maxLength={20}
                 />
                 <Button type="submit" label="Add" disabled={!value} />
             </Form>
