@@ -88,7 +88,7 @@ const DraggableBox = ({
                         overflow: 'visible',
                     }}
                     background="light"
-                    animation="fadeIn"
+                    // animation="fadeIn"
                 >
                     <Header
                         className="drag-handle"

@@ -1,10 +1,16 @@
-import { Box, Tabs, Tab, Button } from 'grommet';
+import { Box, Tabs, Tab, Button, Tag, Text, Anchor } from 'grommet';
 import { lazy, useCallback } from 'react';
 import { PlayFill, StopFill } from 'grommet-icons';
-import { useLocalStorage } from './hooks';
+import { useFetch, useLocalStorage } from './hooks';
 import DraggableBox from './components/DraggableBox';
-import { LocalStorageKey } from '../consts';
+import {
+    CURRENT_VERSION,
+    LATEST_RELEASE_URL,
+    LocalStorageKey,
+    WEBSTORE_LINK,
+} from '../consts';
 import Automator, { useAutomatorContext } from './components/Automator';
+import type { LatestRelease } from '../types';
 
 const Interests = lazy(() => import('./components/Interests'));
 const Messages = lazy(() => import('./components/Messages'));
@@ -13,6 +19,8 @@ const Config = lazy(() => import('./components/Config'));
 const Widget = () => {
     const [tab, setTab] = useLocalStorage(LocalStorageKey.TAB, 0);
     const [started, setStarted] = useAutomatorContext();
+    const { data, loading, error } =
+        useFetch<LatestRelease>(LATEST_RELEASE_URL);
 
     const handleStart = useCallback(() => setStarted((prev) => !prev), []);
 
@@ -23,6 +31,7 @@ const Widget = () => {
                 // hideContent={started}
                 alwaysShow={
                     <Box
+                        direction="row"
                         justify="center"
                         align="center"
                         pad="xsmall"
@@ -31,6 +40,21 @@ const Widget = () => {
                             minHeight: '60px',
                         }}
                     >
+                        <Box
+                            flex
+                            direction="column"
+                            height="50px"
+                            width="100px"
+                            justify="end"
+                        >
+                            <Box width="fit-content">
+                                <Tag
+                                    name="Version"
+                                    value={CURRENT_VERSION}
+                                    size="small"
+                                />
+                            </Box>
+                        </Box>
                         <Button
                             style={{
                                 display: 'flex',
@@ -51,6 +75,47 @@ const Widget = () => {
                                 <PlayFill color="green" size="medium" />
                             )}
                         </Button>
+                        <Box
+                            flex
+                            direction="column"
+                            justify="end"
+                            align="end"
+                            height="50px"
+                            width="100px"
+                        >
+                            <Box width="fit-content">
+                                <Text
+                                    textAlign="end"
+                                    size="small"
+                                    color={
+                                        (data &&
+                                            data.tag_name !==
+                                                CURRENT_VERSION) ||
+                                        error
+                                            ? 'red'
+                                            : ''
+                                    }
+                                >
+                                    {error && 'Failed to fetch latest version'}
+                                    {loading && 'Fetching latest...'}
+                                    {!loading &&
+                                    data &&
+                                    data.tag_name !== CURRENT_VERSION ? (
+                                        <>
+                                            Outdated - latest version is{' '}
+                                            <Anchor
+                                                href={WEBSTORE_LINK}
+                                                title="Download the latest version"
+                                                label={data.tag_name}
+                                                target="_blank"
+                                            />
+                                        </>
+                                    ) : (
+                                        "You're up to date!"
+                                    )}
+                                </Text>
+                            </Box>
+                        </Box>
                     </Box>
                 }
             >
