@@ -1,6 +1,6 @@
 import { createContext, memo, useContext, useEffect, useState } from 'react';
 import { LocalStorageKey } from '../../consts';
-import { sleep } from '../../utils';
+import { randomNumber, sleep } from '../../utils';
 
 import type { ReactNode, SetStateAction, Dispatch } from 'react';
 import type { InterestMap, MessageArray } from '../../types';
@@ -18,6 +18,12 @@ const getStartWaitSecs = () => {
 };
 
 const getWaitSecs = () => {
+    const randomize = JSON.parse(
+        localStorage.getItem(LocalStorageKey.RANDOMIZE) ?? 'false'
+    ) as boolean;
+
+    if (randomize) return randomNumber(3, 10);
+
     const value = localStorage.getItem(LocalStorageKey.WAIT_SECS);
 
     return (value ? JSON.parse(value) : 3) as number;

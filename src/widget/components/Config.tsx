@@ -1,4 +1,4 @@
-import { Box, Form, RangeInput, Text } from 'grommet';
+import { Box, Form, RangeInput, Text, CheckBox } from 'grommet';
 import { memo, useCallback } from 'react';
 import { useLocalStorage } from '../hooks';
 import { LocalStorageKey } from '../../consts';
@@ -15,6 +15,11 @@ const Config = memo(() => {
     const [startWaitSecs, setStartWaitSecs] = useLocalStorage(
         LocalStorageKey.START_WAIT_SECS,
         0
+    );
+
+    const [randomize, setRandomize] = useLocalStorage(
+        LocalStorageKey.RANDOMIZE,
+        false
     );
 
     const handleWaitSecsChange: ChangeEventHandler<HTMLInputElement> =
@@ -67,10 +72,21 @@ const Config = memo(() => {
                             step={1}
                             value={waitSecs}
                             onChange={handleWaitSecsChange}
+                            disabled={randomize}
                         />
                         <Text style={{ width: '20px', textAlign: 'center' }}>
                             {waitSecs}
                         </Text>
+                    </Box>
+                </Box>
+                <Box direction="column">
+                    <Box direction="row" gap="5px">
+                        <CheckBox
+                            label="Randomize wait-between"
+                            checked={randomize}
+                            onChange={(e) => setRandomize(e.target.checked)}
+                        />
+                        <InfoIcon text='Randomize the wait-between seconds to be anywhere between 3 and 10 seconds. When enabled, the provided "Wait-between" seconds will be ignored.' />
                     </Box>
                 </Box>
             </Form>
