@@ -1,6 +1,7 @@
 import { Box, Tabs, Tab, Button, Tag, Text, Anchor } from 'grommet';
 import { lazy, useCallback } from 'react';
 import { PlayFill, StopFill } from 'grommet-icons';
+import { toast } from 'react-hot-toast';
 import { useFetch, useLocalStorage } from './hooks';
 import DraggableBox from './components/DraggableBox';
 import {
@@ -9,7 +10,10 @@ import {
     LocalStorageKey,
     WEBSTORE_LINK,
 } from '../consts';
-import Automator, { useAutomatorContext } from './components/Automator';
+import Automator, {
+    useAutomatorContext,
+    getMessages,
+} from './components/Automator';
 import type { LatestRelease } from '../types';
 
 const Interests = lazy(() => import('./components/Interests'));
@@ -22,7 +26,13 @@ const Widget = () => {
     const { data, loading, error } =
         useFetch<LatestRelease>(LATEST_RELEASE_URL);
 
-    const handleStart = useCallback(() => setStarted((prev) => !prev), []);
+    const handleStart = useCallback(() => {
+        if (!getMessages().length && !started) {
+            return toast.error('Must provide at least one message!');
+        }
+
+        setStarted((prev) => !prev);
+    }, [started]);
 
     return (
         <>
@@ -46,6 +56,7 @@ const Widget = () => {
                             height="50px"
                             width="100px"
                             justify="end"
+                            pad="xxsmall"
                         >
                             <Box width="fit-content">
                                 <Tag
@@ -82,6 +93,7 @@ const Widget = () => {
                             align="end"
                             height="50px"
                             width="100px"
+                            pad="xxsmall"
                         >
                             <Box width="fit-content">
                                 <Text
@@ -102,7 +114,7 @@ const Widget = () => {
                                     data &&
                                     data.tag_name !== CURRENT_VERSION ? (
                                         <>
-                                            Outdated - latest version is{' '}
+                                            Latest version is{' '}
                                             <Anchor
                                                 href={WEBSTORE_LINK}
                                                 title="Download the latest version"

@@ -106,6 +106,7 @@ const Messages = memo(() => {
                     onKeyDown={handleKeyDown}
                     onChange={handleChange}
                     style={{ maxHeight: '200px', minHeight: '50px' }}
+                    autoFocus
                 />
                 <Button
                     type="submit"

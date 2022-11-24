@@ -13,11 +13,12 @@
     "action": {
         "default_title": "Omegle Automator"
     },
-    "permissions": [],
+    "permissions": ["webRequest"],
     "content_scripts": [
         {
             "matches": ["https://www.omegle.com/*"],
-            "js": ["content.js"]
+            "js": ["content.js"],
+            "run_at": "document_idle"
         }
     ]
 }

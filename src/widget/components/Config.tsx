@@ -86,7 +86,7 @@ const Config = memo(() => {
                             checked={randomize}
                             onChange={(e) => setRandomize(e.target.checked)}
                         />
-                        <InfoIcon text='Randomize the wait-between seconds to be anywhere between 3 and 10 seconds. When enabled, the provided "Wait-between" seconds will be ignored.' />
+                        <InfoIcon text='Randomize the wait-between seconds to be anywhere between 3 and 10 seconds. When enabled, the provided "Wait-between" value will be ignored.' />
                     </Box>
                 </Box>
             </Form>

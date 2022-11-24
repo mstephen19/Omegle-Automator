@@ -5,7 +5,7 @@ import { randomNumber, sleep } from '../../utils';
 import type { ReactNode, SetStateAction, Dispatch } from 'react';
 import type { InterestMap, MessageArray } from '../../types';
 
-const getMessages = () => {
+export const getMessages = () => {
     const value = localStorage.getItem(LocalStorageKey.MESSAGES);
 
     return (value ? JSON.parse(value) : []) as MessageArray;

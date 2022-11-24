@@ -91,7 +91,7 @@ const DraggableBox = ({
                     style={{
                         position: 'fixed',
                         zIndex: 9e8,
-                        width: '350px',
+                        width: 'clamp(350px, 30vw , 400px)',
                         height: 'auto',
                         maxHeight: '500px',
                         boxShadow: '0px 0px 4px',
