@@ -1,6 +1,6 @@
 import Draggable from 'react-draggable';
 import { useState, useCallback } from 'react';
-import { Card, Header, Text, Button, Tip } from 'grommet';
+import { Card, Header, Text, Button, Tip, Box } from 'grommet';
 import { Close, Add } from 'grommet-icons';
 import { useLocalStorage } from '../hooks';
 
@@ -45,16 +45,26 @@ const DraggableBox = ({
     return (
         <>
             <Tip
+                plain={true}
                 content={
-                    <Text
-                        textAlign="center"
+                    <Box
+                        pad="xsmall"
                         style={{
-                            maxWidth: '250px',
+                            borderRadius: '10px',
+                            background: 'rgba(18,44,51,0.75)',
                         }}
                     >
-                        Lost the widget somehow? Click this button to move it
-                        back to its original position!
-                    </Text>
+                        <Text
+                            textAlign="center"
+                            style={{
+                                maxWidth: '250px',
+                            }}
+                            color="white"
+                        >
+                            Lost the widget somehow? Click this button to move
+                            it back to its original position!
+                        </Text>
+                    </Box>
                 }
             >
                 <Button
@@ -106,7 +116,7 @@ const DraggableBox = ({
                         align="center"
                         pad="small"
                     >
-                        <Text>{title}</Text>
+                        <Text weight="bold">{title}</Text>
                         {!hide && !hideContent ? (
                             <Close
                                 onClick={() => {

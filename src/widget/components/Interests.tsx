@@ -1,8 +1,8 @@
 import { Box, Form, TextInput, Button, Tag } from 'grommet';
 import { useState, memo, useCallback } from 'react';
-import { v4 } from 'uuid';
 import { useLocalStorage } from '../hooks';
 import { LocalStorageKey } from '../../consts';
+import { stringToId } from '../../utils';
 
 import type { InterestMap } from '../../types';
 import type { MouseEventHandler, ChangeEventHandler } from 'react';
@@ -17,7 +17,14 @@ const Interests = memo(() => {
     const handleSubmit = useCallback(() => {
         if (!value) return;
 
-        setInterests((prev) => ({ ...prev, [v4()]: value }));
+        const trimmed = value.trim();
+        const id = stringToId(trimmed);
+
+        // If the interest hasn't already been added, go ahead and add it.
+        if (!(id in interests)) {
+            setInterests((prev) => ({ ...prev, [id]: trimmed }));
+        }
+
         setValue('');
     }, [value]);
 
@@ -51,7 +58,12 @@ const Interests = memo(() => {
                     onChange={handleChange}
                     maxLength={20}
                 />
-                <Button type="submit" label="Add" disabled={!value} />
+                <Button
+                    type="submit"
+                    label="Add"
+                    disabled={!value}
+                    style={{ height: 'fit-content' }}
+                />
             </Form>
             <Box wrap pad="xxsmall" direction="row">
                 {interests &&
