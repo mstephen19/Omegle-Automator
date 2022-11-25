@@ -2,6 +2,10 @@
 
 Automate actions on Omegle.
 
+## Install
+
+[**Chrome** extension](https://chrome.google.com/webstore/detail/omegle-automator/cjnledbijckhccgkhiamlpnpehfhcmkg)
+
 ## About
 
 Automatically fill out interests and send messages using the Omegle Automator widget that will appear on the page after installing the extension.
@@ -17,12 +21,6 @@ What happens when Omegle Automator finishes sending the sequence of messages? It
 - Simple & accessible. Most Omegle bots require modifying configuration files and running them via your computer's terminal. This extension provides an easy to use draggable and collapsible widget that makes it simple to configure and start the bot.
 - Reliable. I've built various Omegle automation tools (this is my fourth one), and have enough experience to understand and adequately handle all the edge cases the bot might be put through.
 - Configurable. It's easy to add/remove messages to your sequence, as well as rearrange them by dragging them up or down.
-
-## Install
-
-[**Chrome** extension](https://chrome.google.com/webstore/detail/omegle-automator/cjnledbijckhccgkhiamlpnpehfhcmkg)
-
-My Chrome Extension
 
 ## Contribution
 
