@@ -1,6 +1,6 @@
 import Draggable from 'react-draggable';
-import { useState, useCallback } from 'react';
-import { Card, Header, Text, Button, Tip } from 'grommet';
+import { useState, useCallback, useRef } from 'react';
+import { Card, Header, Text, Button, Tip, Box } from 'grommet';
 import { Close, Add } from 'grommet-icons';
 import { useLocalStorage } from '../hooks';
 
@@ -22,6 +22,7 @@ const DraggableBox = ({
     alwaysShow,
     hideContent,
 }: DraggableBoxProps) => {
+    const cardRef = useRef<HTMLDivElement>(null);
     const [dragging, setDragging] = useState(false);
     const [hide, setHide] = useLocalStorage(
         `draggable-hide-${title.toLowerCase().replace(/\s/g, '-')}`,
@@ -37,24 +38,57 @@ const DraggableBox = ({
         []
     );
 
+    const handlePositions = useCallback((x: number, y: number) => {
+        const rect = cardRef.current?.getBoundingClientRect()!;
+        const rightX = rect.left + rect.width;
+        const bottomY = rect.top + rect.height;
+
+        setPositions({
+            x:
+                // Disallow the card from going outside of the page on the left
+                x < 0
+                    ? 5
+                    : // As well as on the right
+                    rightX > window.innerWidth
+                    ? window.innerWidth - rect.width - 5
+                    : x,
+            y:
+                y < 0
+                    ? 5
+                    : bottomY > window.innerHeight
+                    ? window.innerHeight - rect.height - 5
+                    : y,
+        });
+    }, []);
+
     const handleDragStop: DraggableEventHandler = useCallback((_, { x, y }) => {
-        setPositions({ x, y });
+        handlePositions(x, y);
         setDragging(false);
     }, []);
 
     return (
         <>
             <Tip
+                plain={true}
                 content={
-                    <Text
-                        textAlign="center"
+                    <Box
+                        pad="xsmall"
                         style={{
-                            maxWidth: '250px',
+                            borderRadius: '10px',
+                            background: 'rgba(18,44,51,0.75)',
                         }}
                     >
-                        Lost the widget somehow? Click this button to move it
-                        back to its original position!
-                    </Text>
+                        <Text
+                            textAlign="center"
+                            style={{
+                                maxWidth: '250px',
+                            }}
+                            color="white"
+                        >
+                            Lost the widget somehow? Click this button to move
+                            it back to its original position!
+                        </Text>
+                    </Box>
                 }
             >
                 <Button
@@ -78,17 +112,19 @@ const DraggableBox = ({
                 onStop={handleDragStop}
             >
                 <Card
+                    ref={cardRef}
                     style={{
                         position: 'fixed',
                         zIndex: 9e8,
-                        width: '350px',
+                        width: 'clamp(350px, 30vw , 400px)',
+                        minWidth: '300px',
                         height: 'auto',
                         maxHeight: '500px',
                         boxShadow: '0px 0px 4px',
                         overflow: 'visible',
                     }}
                     background="light"
-                    // animation="fadeIn"
+                    animation="fadeIn"
                 >
                     <Header
                         className="drag-handle"
@@ -106,7 +142,7 @@ const DraggableBox = ({
                         align="center"
                         pad="small"
                     >
-                        <Text>{title}</Text>
+                        <Text weight="bold">{title}</Text>
                         {!hide && !hideContent ? (
                             <Close
                                 onClick={() => {

@@ -1,11 +1,11 @@
 import { createContext, memo, useContext, useEffect, useState } from 'react';
 import { LocalStorageKey } from '../../consts';
-import { sleep } from '../../utils';
+import { randomNumber, sleep } from '../../utils';
 
 import type { ReactNode, SetStateAction, Dispatch } from 'react';
 import type { InterestMap, MessageArray } from '../../types';
 
-const getMessages = () => {
+export const getMessages = () => {
     const value = localStorage.getItem(LocalStorageKey.MESSAGES);
 
     return (value ? JSON.parse(value) : []) as MessageArray;
@@ -18,6 +18,12 @@ const getStartWaitSecs = () => {
 };
 
 const getWaitSecs = () => {
+    const randomize = JSON.parse(
+        localStorage.getItem(LocalStorageKey.RANDOMIZE) ?? 'false'
+    ) as boolean;
+
+    if (randomize) return randomNumber(3, 10);
+
     const value = localStorage.getItem(LocalStorageKey.WAIT_SECS);
 
     return (value ? JSON.parse(value) : 3) as number;
@@ -87,13 +93,22 @@ const startSession = () => {
     ).click();
 };
 
-const clickNewButton = () => {
+const newButtonPresent = () => {
+    // Find the disconnect button
     const button = document.querySelector(
         'button.disconnectbtn'
     ) as HTMLButtonElement;
 
-    if (!button.childNodes?.[0]?.textContent?.includes('New')) return;
+    // If the text node contains "New", return the button
+    if (button.childNodes?.[0]?.textContent?.includes('New')) return button;
 
+    // Otherwise, return false
+    return false;
+};
+
+const clickNewButton = () => {
+    const button = newButtonPresent();
+    if (!button) return;
     button?.click();
 };
 
@@ -185,6 +200,12 @@ const Automator = memo(() => {
                 await waitToType();
                 // Wait for the number of user-provided pre-chat wait seconds.
                 await sleep(getStartWaitSecs());
+                // If the workflow was cancelled during the start wait time, exit out completely.
+                if (cancelled) return;
+                // If the new button is present (meaning the bot was disconnected on
+                // during the start-wait time), don't do anything else and start the
+                // workflow again.
+                if (newButtonPresent()) continue;
 
                 // Send messages
                 for await (const x of sendMessages()) {

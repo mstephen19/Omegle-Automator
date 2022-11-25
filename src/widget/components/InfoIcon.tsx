@@ -29,7 +29,7 @@ export const InfoIcon = ({ text }: { text: string }) => {
                         transform: 'translateX(20px)',
                         maxWidth: '200px',
                     }}
-                    background="grey"
+                    background="rgba(18,44,51,0.75)"
                     pad="xsmall"
                 >
                     <Text color="#FFF" style={{ width: 'fit-content' }}>

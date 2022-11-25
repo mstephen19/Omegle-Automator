@@ -1,11 +1,12 @@
 import { Box, Form, TextInput, Button, Tag } from 'grommet';
 import { useState, memo, useCallback } from 'react';
-import { v4 } from 'uuid';
+import { toast } from 'react-hot-toast';
 import { useLocalStorage } from '../hooks';
 import { LocalStorageKey } from '../../consts';
+import { stringToId } from '../../utils';
 
-import type { InterestMap } from '../../types';
 import type { MouseEventHandler, ChangeEventHandler } from 'react';
+import type { InterestMap } from '../../types';
 
 const Interests = memo(() => {
     const [value, setValue] = useState('');
@@ -17,7 +18,14 @@ const Interests = memo(() => {
     const handleSubmit = useCallback(() => {
         if (!value) return;
 
-        setInterests((prev) => ({ ...prev, [v4()]: value }));
+        const trimmed = value.trim();
+        const id = stringToId(trimmed);
+
+        // If the interest hasn't already been added, go ahead and add it.
+        if (!(id in interests)) {
+            setInterests((prev) => ({ ...prev, [id]: trimmed }));
+        } else toast.error(`Already added the interest "${trimmed}"`);
+
         setValue('');
     }, [value]);
 
@@ -49,9 +57,15 @@ const Interests = memo(() => {
                     placeholder="ex. youtube"
                     value={value}
                     onChange={handleChange}
-                    maxLength={20}
+                    maxLength={25}
+                    autoFocus
                 />
-                <Button type="submit" label="Add" disabled={!value} />
+                <Button
+                    type="submit"
+                    label="Add"
+                    disabled={!value}
+                    style={{ height: 'fit-content' }}
+                />
             </Form>
             <Box wrap pad="xxsmall" direction="row">
                 {interests &&

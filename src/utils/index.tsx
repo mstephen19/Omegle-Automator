@@ -21,3 +21,14 @@ export const renderWidget = () => {
 export const sleep = (secs: number) => {
     return new Promise((resolve) => setTimeout(resolve, secs * 1e3));
 };
+
+export const stringToId = (str: string) => {
+    return str
+        .trim()
+        .split('')
+        .reduce((acc, curr) => acc.concat(curr.charCodeAt(0).toString()), '');
+};
+
+export const randomNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};

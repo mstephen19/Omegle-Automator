@@ -7,14 +7,14 @@ const PATHS = require('./paths');
 
 // Merge webpack configuration files
 const config = (env, argv) =>
-  merge(common, {
-    resolve: {
-      extensions: ['.ts', '.js', '.json', '.tsx', '.jsx'],
-    },
-    entry: {
-      content: PATHS.src + '/content.ts',
-    },
-    devtool: argv.mode === 'production' ? false : 'source-map',
-  });
+    merge(common, {
+        resolve: {
+            extensions: ['.ts', '.js', '.json', '.tsx', '.jsx'],
+        },
+        entry: {
+            content: PATHS.src + '/content.ts',
+        },
+        devtool: argv.mode === 'production' ? false : 'source-map',
+    });
 
 module.exports = config;

@@ -101,17 +101,18 @@ const Messages = memo(() => {
                 <TextArea
                     name="interests"
                     resize="vertical"
-                    placeholder="ex. youtube"
+                    placeholder="ex. hello! how are you?"
                     value={value}
                     onKeyDown={handleKeyDown}
                     onChange={handleChange}
                     style={{ maxHeight: '200px', minHeight: '50px' }}
+                    autoFocus
                 />
                 <Button
                     type="submit"
                     label="Add"
                     disabled={!value}
-                    style={{ maxHeight: '50px' }}
+                    style={{ maxHeight: '50px', height: 'fit-content' }}
                 />
             </Form>
             <Box
