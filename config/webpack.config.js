@@ -13,7 +13,6 @@ const config = (env, argv) =>
         },
         entry: {
             content: PATHS.src + '/content.ts',
-            // background: PATHS.src + '/background.ts',
         },
         devtool: argv.mode === 'production' ? false : 'source-map',
     });
