@@ -5,6 +5,8 @@ export const enum LocalStorageKey {
     WAIT_SECS = 'automator-wait-secs',
     RANDOMIZE = 'automator-randomize-wait-secs',
     START_WAIT_SECS = 'automator-start-wait-secs',
+    USE_INTERESTS = 'automator-use-interests',
+    STOP_AFTER_MINS = 'automator-stop-after-mins',
 }
 
 export const LATEST_RELEASE_URL =

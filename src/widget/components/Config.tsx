@@ -1,4 +1,4 @@
-import { Box, Form, RangeInput, Text, CheckBox } from 'grommet';
+import { Box, Form, RangeInput, Text, CheckBox, TextInput } from 'grommet';
 import { memo, useCallback } from 'react';
 import { useLocalStorage } from '../hooks';
 import { LocalStorageKey } from '../../consts';
@@ -22,6 +22,16 @@ const Config = memo(() => {
         false
     );
 
+    const [useInterests, setUseInterests] = useLocalStorage(
+        LocalStorageKey.USE_INTERESTS,
+        true
+    );
+
+    const [stopAfterMins, setStopAfterMins] = useLocalStorage<number | null>(
+        LocalStorageKey.STOP_AFTER_MINS,
+        0
+    );
+
     const handleWaitSecsChange: ChangeEventHandler<HTMLInputElement> =
         useCallback((e) => {
             setWaitSecs(e.target.valueAsNumber);
@@ -31,6 +41,12 @@ const Config = memo(() => {
         useCallback((e) => {
             setStartWaitSecs(e.target.valueAsNumber);
         }, []);
+
+    const handleRandomizeChange: ChangeEventHandler<HTMLInputElement> =
+        useCallback((e) => setRandomize(e.target.checked), []);
+
+    const handleUseInterestsChange: ChangeEventHandler<HTMLInputElement> =
+        useCallback((e) => setUseInterests(e.target.checked), []);
 
     return (
         <Box direction="column" pad="small">
@@ -79,14 +95,57 @@ const Config = memo(() => {
                         </Text>
                     </Box>
                 </Box>
+
+                <Box direction="column">
+                    <Box direction="row" gap="5px">
+                        <label htmlFor="stop-after">Stop after minutes</label>
+                        <InfoIcon text="The number of minutes the bot should run before being automatically stopped. If 0 is provided, the bot will run endlessly. The maximum possible value is 1440 minutes" />
+                    </Box>
+                    <Box direction="row" width="fit-content">
+                        <TextInput
+                            placeholder="0"
+                            type="number"
+                            value={stopAfterMins === null ? '' : stopAfterMins}
+                            step={30}
+                            onChange={(e) => {
+                                // Only match numbers or nothing
+                                if (!/^(\d+)?$/g.test(e.target.value)) return;
+
+                                // If we've got an empty string, set the value to null.
+                                if (!e.target.value) {
+                                    return setStopAfterMins(null);
+                                }
+
+                                // If the number is less than 0 or greater than 24hrs,
+                                // do nothing.
+                                const num = +e.target.value;
+                                if (num < 0 || num > 24 * 60) return;
+
+                                setStopAfterMins(num);
+                            }}
+                        />
+                    </Box>
+                </Box>
+
                 <Box direction="column">
                     <Box direction="row" gap="5px">
                         <CheckBox
                             label="Randomize wait-between"
                             checked={randomize}
-                            onChange={(e) => setRandomize(e.target.checked)}
+                            onChange={handleRandomizeChange}
                         />
                         <InfoIcon text='Randomize the wait-between seconds to be anywhere between 3 and 10 seconds. When enabled, the provided "Wait-between" value will be ignored.' />
+                    </Box>
+                </Box>
+
+                <Box direction="column">
+                    <Box direction="row" gap="5px">
+                        <CheckBox
+                            label="Use interests"
+                            checked={useInterests}
+                            onChange={handleUseInterestsChange}
+                        />
+                        <InfoIcon text="Whether or not to use the custom interests provided within the automator." />
                     </Box>
                 </Box>
             </Form>

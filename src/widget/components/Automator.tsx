@@ -11,10 +11,22 @@ export const getMessages = () => {
     return (value ? JSON.parse(value) : []) as MessageArray;
 };
 
+const getStopAfterMinutes = () => {
+    const value = localStorage.getItem(LocalStorageKey.STOP_AFTER_MINS);
+
+    return value && JSON.parse(value) !== null ? +value : 0;
+};
+
 const getStartWaitSecs = () => {
     const value = localStorage.getItem(LocalStorageKey.START_WAIT_SECS);
 
     return (value ? JSON.parse(value) : 0) as number;
+};
+
+const getUseInterests = () => {
+    const value = localStorage.getItem(LocalStorageKey.USE_INTERESTS);
+
+    return (value ? JSON.parse(value) : true) as boolean;
 };
 
 const getWaitSecs = () => {
@@ -174,7 +186,7 @@ export const AutomatorProvider = ({ children }: { children: ReactNode }) => {
 };
 
 const Automator = memo(() => {
-    const [started] = useAutomatorContext();
+    const [started, setStarted] = useAutomatorContext();
 
     useEffect(() => {
         // If we don't want to start, do nothing.
@@ -183,12 +195,25 @@ const Automator = memo(() => {
         // Set this value to true when the component is rerendered.
         let cancelled = false;
 
-        // If a chat session is not open already, fill out the
-        // interests and automatically start a chat session.
-        if (!isInChat()) {
-            populateInterests();
-            startSession();
+        // Create a timeout variable and assign a timeout to it only if the
+        // user provided a minutes value above 0.
+        let timeout: NodeJS.Timeout;
+        const stopAfterMins = getStopAfterMinutes();
+        if (stopAfterMins > 0) {
+            timeout = setTimeout(() => {
+                cancelled = true;
+                setStarted(false);
+            }, stopAfterMins * 6e4);
         }
+
+        // If a chat session is not open already AND the user wants to
+        // use the custom interests, fill out the interests
+        if (!isInChat() && getUseInterests()) {
+            populateInterests();
+        }
+
+        // Then start the session no matter what
+        if (!isInChat()) startSession();
 
         (async () => {
             // Check on every iteration whether or not the sequence has
@@ -234,6 +259,7 @@ const Automator = memo(() => {
 
         return () => {
             cancelled = true;
+            if (timeout) clearTimeout(timeout);
         };
     }, [started]);
 
