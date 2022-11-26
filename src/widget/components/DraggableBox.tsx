@@ -39,7 +39,7 @@ const DraggableBox = ({
     );
 
     const handlePositions = useCallback((x: number, y: number) => {
-        const rect = cardRef.current?.getBoundingClientRect()!;
+        const rect = cardRef.current!.getBoundingClientRect()!;
         const rightX = rect.left + rect.width;
         const bottomY = rect.top + rect.height;
 
