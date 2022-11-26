@@ -16,9 +16,9 @@ const Interests = memo(() => {
     );
 
     const handleSubmit = useCallback(() => {
-        if (!value) return;
-
         const trimmed = value.trim();
+        if (!trimmed) return;
+
         const id = stringToId(trimmed);
 
         // If the interest hasn't already been added, go ahead and add it.
@@ -63,7 +63,7 @@ const Interests = memo(() => {
                 <Button
                     type="submit"
                     label="Add"
-                    disabled={!value}
+                    disabled={!value.trim()}
                     style={{ height: 'fit-content' }}
                 />
             </Form>

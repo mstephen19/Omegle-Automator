@@ -38,7 +38,7 @@ const Messages = memo(() => {
     }, []);
 
     const handleSubmit = useCallback(() => {
-        if (!value) return;
+        if (!value.trim()) return;
 
         setMessages((prev) => {
             return [...prev, { id: v4(), text: value }];
@@ -111,7 +111,7 @@ const Messages = memo(() => {
                 <Button
                     type="submit"
                     label="Add"
-                    disabled={!value}
+                    disabled={!value.trim()}
                     style={{ maxHeight: '50px', height: 'fit-content' }}
                 />
             </Form>
