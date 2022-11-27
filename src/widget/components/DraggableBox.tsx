@@ -38,7 +38,7 @@ const DraggableBox = ({ children, title, alwaysShow }: DraggableBoxProps) => {
                 // If the ctrl key isn't being pressed, simply ignore.
                 case !e.ctrlKey:
                     return;
-                case e.code === 'KeyX':
+                case e.code === 'KeyQ':
                     setHide((prev) => !prev);
                 default:
                     return;

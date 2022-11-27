@@ -32,6 +32,11 @@ const Config = memo(() => {
         0
     );
 
+    const [stopReload, setStopReload] = useLocalStorage(
+        LocalStorageKey.STOP_RELOAD,
+        false
+    );
+
     const handleWaitSecsChange: ChangeEventHandler<HTMLInputElement> =
         useCallback((e) => {
             setWaitSecs(e.target.valueAsNumber);
@@ -48,11 +53,28 @@ const Config = memo(() => {
     const handleUseInterestsChange: ChangeEventHandler<HTMLInputElement> =
         useCallback((e) => setUseInterests(e.target.checked), []);
 
+    const handleStopReloadChange: ChangeEventHandler<HTMLInputElement> =
+        useCallback((e) => setStopReload(e.target.checked), []);
+
     return (
         <Box direction="column" pad="small">
             <Form
-                style={{ display: 'flex', gap: '5px', flexDirection: 'column' }}
+                style={{
+                    display: 'flex',
+                    gap: '10px',
+                    flexDirection: 'column',
+                }}
             >
+                <Box direction="column">
+                    <Box direction="row" gap="5px">
+                        <CheckBox
+                            label="Use interests"
+                            checked={useInterests}
+                            onChange={handleUseInterestsChange}
+                        />
+                        <InfoIcon text="Whether or not to use the custom interests provided within the automator." />
+                    </Box>
+                </Box>
                 <Box direction="column">
                     <Box direction="row" gap="5px">
                         <label htmlFor="start-wait-secs">
@@ -141,11 +163,12 @@ const Config = memo(() => {
                 <Box direction="column">
                     <Box direction="row" gap="5px">
                         <CheckBox
-                            label="Use interests"
-                            checked={useInterests}
-                            onChange={handleUseInterestsChange}
+                            label="Reload after stop"
+                            checked={stopReload}
+                            onChange={handleStopReloadChange}
+                            disabled={!stopAfterMins}
                         />
-                        <InfoIcon text="Whether or not to use the custom interests provided within the automator." />
+                        <InfoIcon text='Whether or not to reload the page after the automator has been automatically stopped. Not applicable if "Stop after minutes" is zero.' />
                     </Box>
                 </Box>
             </Form>

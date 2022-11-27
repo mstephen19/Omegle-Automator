@@ -7,6 +7,7 @@ export const enum LocalStorageKey {
     START_WAIT_SECS = 'automator-start-wait-secs',
     USE_INTERESTS = 'automator-use-interests',
     STOP_AFTER_MINS = 'automator-stop-after-mins',
+    STOP_RELOAD = 'automator-reload-after-stop',
 }
 
 export const LATEST_RELEASE_URL =

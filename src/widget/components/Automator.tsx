@@ -29,6 +29,12 @@ const getUseInterests = () => {
     return (value ? JSON.parse(value) : true) as boolean;
 };
 
+const getStopReload = () => {
+    const value = localStorage.getItem(LocalStorageKey.STOP_RELOAD);
+
+    return (value ? JSON.parse(value) : false) as boolean;
+};
+
 const getWaitSecs = () => {
     const randomize = JSON.parse(
         localStorage.getItem(LocalStorageKey.RANDOMIZE) ?? 'false'
@@ -205,6 +211,7 @@ const Automator = memo(() => {
             timeout = setTimeout(() => {
                 cancelled = true;
                 setStarted(false);
+                if (getStopReload()) window.location.reload();
             }, stopAfterMins * 6e4);
         }
 
