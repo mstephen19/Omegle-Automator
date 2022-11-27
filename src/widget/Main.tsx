@@ -22,6 +22,11 @@ const Main = () => {
                     <Toaster
                         position="top-center"
                         toastOptions={{ duration: 3e3 }}
+                        containerStyle={{
+                            zIndex: 9e12,
+                            pointerEvents: 'none',
+                            userSelect: 'none',
+                        }}
                     />
                     <Widget />
                 </AutomatorProvider>

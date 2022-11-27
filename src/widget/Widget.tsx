@@ -1,5 +1,5 @@
 import { Box, Tabs, Tab, Button, Tag, Text, Anchor } from 'grommet';
-import { lazy, useCallback } from 'react';
+import { lazy, useCallback, useEffect } from 'react';
 import { PlayFill, StopFill } from 'grommet-icons';
 import { toast } from 'react-hot-toast';
 import { useFetch, useLocalStorage } from './hooks';
@@ -14,6 +14,7 @@ import Automator, {
     useAutomatorContext,
     getMessages,
 } from './components/Automator';
+
 import type { LatestRelease } from '../types';
 
 const Interests = lazy(() => import('./components/Interests'));
@@ -33,6 +34,22 @@ const Widget = () => {
 
         setStarted((prev) => !prev);
     }, [started]);
+
+    // Allow certain
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            switch (true) {
+                case e.ctrlKey && e.code === 'Space':
+                    handleStart();
+            }
+        };
+
+        window.addEventListener('keyup', handler);
+
+        return () => {
+            window.removeEventListener('keyup', handler);
+        };
+    }, []);
 
     return (
         <>
