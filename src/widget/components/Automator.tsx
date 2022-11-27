@@ -135,8 +135,10 @@ const canType = () => {
  */
 const waitToType = async (): Promise<void> => {
     if (canType()) return;
-    // wait for just a quarter of a second before clicking again
     await sleep(0.5);
+    // If the new button is present, go ahead and click it
+    const button = newButtonPresent();
+    if (button) button.click();
     return waitToType();
 };
 
