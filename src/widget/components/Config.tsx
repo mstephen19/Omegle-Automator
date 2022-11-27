@@ -98,6 +98,17 @@ const Config = memo(() => {
 
                 <Box direction="column">
                     <Box direction="row" gap="5px">
+                        <CheckBox
+                            label="Randomize wait-between"
+                            checked={randomize}
+                            onChange={handleRandomizeChange}
+                        />
+                        <InfoIcon text='Randomize the wait-between seconds to be anywhere between 3 and 8 seconds. When enabled, the provided "Wait-between" value will be ignored.' />
+                    </Box>
+                </Box>
+
+                <Box direction="column">
+                    <Box direction="row" gap="5px">
                         <label htmlFor="stop-after">Stop after minutes</label>
                         <InfoIcon text="The number of minutes the bot should run before being automatically stopped. If 0 is provided, the bot will run endlessly. The maximum possible value is 1440 minutes" />
                     </Box>
@@ -124,17 +135,6 @@ const Config = memo(() => {
                                 setStopAfterMins(num);
                             }}
                         />
-                    </Box>
-                </Box>
-
-                <Box direction="column">
-                    <Box direction="row" gap="5px">
-                        <CheckBox
-                            label="Randomize wait-between"
-                            checked={randomize}
-                            onChange={handleRandomizeChange}
-                        />
-                        <InfoIcon text='Randomize the wait-between seconds to be anywhere between 3 and 10 seconds. When enabled, the provided "Wait-between" value will be ignored.' />
                     </Box>
                 </Box>
 

@@ -120,11 +120,12 @@ const DraggableBox = ({
                         minWidth: '300px',
                         height: 'auto',
                         maxHeight: '500px',
-                        boxShadow: '0px 0px 4px',
+                        // boxShadow: '0px 0px 4px',
                         overflow: 'visible',
                     }}
                     background="light"
                     animation="fadeIn"
+                    elevation="xlarge"
                 >
                     <Header
                         className="drag-handle"

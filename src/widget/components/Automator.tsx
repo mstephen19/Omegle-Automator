@@ -34,7 +34,7 @@ const getWaitSecs = () => {
         localStorage.getItem(LocalStorageKey.RANDOMIZE) ?? 'false'
     ) as boolean;
 
-    if (randomize) return randomNumber(3, 10);
+    if (randomize) return randomNumber(3, 8);
 
     const value = localStorage.getItem(LocalStorageKey.WAIT_SECS);
 

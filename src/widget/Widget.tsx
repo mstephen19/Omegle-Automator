@@ -83,7 +83,7 @@ const Widget = () => {
                         >
                             {started && <StopFill color="red" size="medium" />}
                             {!started && (
-                                <PlayFill color="green" size="medium" />
+                                <PlayFill color={'green'} size="medium" />
                             )}
                         </Button>
                         <Box
