@@ -6,6 +6,7 @@ import { useLocalStorage } from '../hooks';
 
 import type { DraggableEventHandler } from 'react-draggable';
 import type { ReactNode } from 'react';
+import { InfoIcon } from './InfoIcon';
 
 const defaultPositions = { x: 25, y: 25 };
 

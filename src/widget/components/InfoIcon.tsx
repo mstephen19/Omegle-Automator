@@ -2,7 +2,12 @@ import { CircleInformation } from 'grommet-icons';
 import { Box, Text } from 'grommet';
 import { useState, useCallback } from 'react';
 
-export const InfoIcon = ({ text }: { text: string }) => {
+type InfoIconProps = {
+    text: string;
+    color?: string;
+};
+
+export const InfoIcon = ({ text, color }: InfoIconProps) => {
     const [hovering, setHovering] = useState(false);
 
     const handleMouseOver = useCallback(() => setHovering(true), []);
@@ -13,7 +18,7 @@ export const InfoIcon = ({ text }: { text: string }) => {
             <CircleInformation
                 size="20px"
                 cursor="help"
-                color={'#444444'}
+                color={color ?? '#444444'}
                 onMouseOver={handleMouseOver}
                 onMouseOut={handleMouseOut}
             />

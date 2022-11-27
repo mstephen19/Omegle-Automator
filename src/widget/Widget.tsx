@@ -1,5 +1,5 @@
 import { Box, Tabs, Tab, Button, Tag, Text, Anchor } from 'grommet';
-import { lazy, useCallback, useEffect } from 'react';
+import { lazy, useCallback, useEffect, useMemo } from 'react';
 import { PlayFill, StopFill } from 'grommet-icons';
 import { toast } from 'react-hot-toast';
 import { useFetch, useLocalStorage } from './hooks';
@@ -21,6 +21,12 @@ const Interests = lazy(() => import('./components/Interests'));
 const Messages = lazy(() => import('./components/Messages'));
 const Config = lazy(() => import('./components/Config'));
 
+const tabs = {
+    Interests: () => <Interests />,
+    Messages: () => <Messages />,
+    Config: () => <Config />,
+};
+
 const Widget = () => {
     const [tab, setTab] = useLocalStorage(LocalStorageKey.TAB, 0);
     const [started, setStarted] = useAutomatorContext();
@@ -35,12 +41,32 @@ const Widget = () => {
         setStarted((prev) => !prev);
     }, [started]);
 
-    // Allow certain
+    const { codeRegex } = useMemo(() => {
+        const total = Object.values(tabs).length;
+        const codeRegex = new RegExp(
+            `^Digit(${[...new Array(total + 1).keys()].slice(1).join('|')})$`
+        );
+
+        return { total, codeRegex };
+    }, []);
+
+    // Allow certain keypresses to do certain actions
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
             switch (true) {
-                case e.ctrlKey && e.code === 'Space':
+                // If the ctrl key isn't being pressed, simply ignore.
+                case !e.ctrlKey:
+                    return;
+                // ctrl + space - start + stop
+                case e.code === 'Space':
                     handleStart();
+                    break;
+                // ctrl + number - switch tab
+                case codeRegex.test(e.code):
+                    setTab(+e.code.replace(/Digit/g, '') - 1);
+
+                default:
+                    return;
             }
         };
 
@@ -154,15 +180,13 @@ const Widget = () => {
                     style={{ overflowY: 'scroll' }}
                 >
                     <Tabs activeIndex={tab} onActive={setTab}>
-                        <Tab title="Interests">
-                            <Interests />
-                        </Tab>
-                        <Tab title="Messages">
-                            <Messages />
-                        </Tab>
-                        <Tab title="Config">
-                            <Config />
-                        </Tab>
+                        {Object.entries(tabs).map(([title, content]) => {
+                            return (
+                                <Tab title={title} key={title}>
+                                    {content()}
+                                </Tab>
+                            );
+                        })}
                     </Tabs>
                 </Box>
             </DraggableBox>
