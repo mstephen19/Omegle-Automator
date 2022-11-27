@@ -1,5 +1,5 @@
 import { Box, Tabs, Tab, Button, Tag, Text, Anchor } from 'grommet';
-import { lazy, useCallback, useEffect, useMemo } from 'react';
+import { lazy, useCallback, useEffect, useMemo, useState } from 'react';
 import { PlayFill, StopFill } from 'grommet-icons';
 import { toast } from 'react-hot-toast';
 import { useFetch, useLocalStorage } from './hooks';
@@ -81,7 +81,6 @@ const Widget = () => {
         <>
             <DraggableBox
                 title="Omegle Automator"
-                // hideContent={started}
                 alwaysShow={
                     <Box
                         direction="row"

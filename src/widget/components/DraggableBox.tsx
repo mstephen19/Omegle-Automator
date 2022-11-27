@@ -1,12 +1,11 @@
 import Draggable from 'react-draggable';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Card, Header, Text, Button, Tip, Box } from 'grommet';
 import { Close, Add } from 'grommet-icons';
 import { useLocalStorage } from '../hooks';
 
 import type { DraggableEventHandler } from 'react-draggable';
 import type { ReactNode } from 'react';
-import { InfoIcon } from './InfoIcon';
 
 const defaultPositions = { x: 25, y: 25 };
 
@@ -14,15 +13,9 @@ type DraggableBoxProps = {
     title: string;
     children?: ReactNode;
     alwaysShow?: ReactNode;
-    hideContent?: boolean;
 };
 
-const DraggableBox = ({
-    children,
-    title,
-    alwaysShow,
-    hideContent,
-}: DraggableBoxProps) => {
+const DraggableBox = ({ children, title, alwaysShow }: DraggableBoxProps) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const [dragging, setDragging] = useState(false);
     const [hide, setHide] = useLocalStorage(
@@ -38,6 +31,26 @@ const DraggableBox = ({
         () => setDragging(true),
         []
     );
+
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            switch (true) {
+                // If the ctrl key isn't being pressed, simply ignore.
+                case !e.ctrlKey:
+                    return;
+                case e.code === 'KeyX':
+                    setHide((prev) => !prev);
+                default:
+                    return;
+            }
+        };
+
+        window.addEventListener('keyup', handler);
+
+        return () => {
+            window.removeEventListener('keyup', handler);
+        };
+    }, []);
 
     const handlePositions = useCallback((x: number, y: number) => {
         const rect = cardRef.current!.getBoundingClientRect()!;
@@ -145,7 +158,7 @@ const DraggableBox = ({
                         pad="small"
                     >
                         <Text weight="bold">{title}</Text>
-                        {!hide && !hideContent ? (
+                        {!hide ? (
                             <Close
                                 onClick={() => {
                                     setHide(true);
@@ -155,7 +168,6 @@ const DraggableBox = ({
                         ) : (
                             <Add
                                 onClick={() => {
-                                    if (hideContent) return;
                                     setHide(false);
                                 }}
                                 style={{ cursor: 'pointer' }}
@@ -163,7 +175,7 @@ const DraggableBox = ({
                         )}
                     </Header>
                     <>
-                        {!hide && !hideContent && children}
+                        {!hide && children}
                         {alwaysShow && alwaysShow}
                     </>
                 </Card>
