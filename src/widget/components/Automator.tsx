@@ -1,6 +1,6 @@
 import { createContext, memo, useContext, useEffect, useState } from 'react';
 import { LocalStorageKey } from '../../consts';
-import { randomNumber, sleep } from '../../utils';
+import { randomNumber, sleep, stringFromSpintax } from '../../utils';
 
 import type { ReactNode, SetStateAction, Dispatch } from 'react';
 import type { InterestMap, MessageArray } from '../../types';
@@ -157,7 +157,7 @@ const sendMessages = async function* () {
         const elem = document.querySelector(
             'textarea.chatmsg'
         ) as HTMLTextAreaElement;
-        elem.value = message.text;
+        elem.value = stringFromSpintax(message.text);
 
         // Click the send button
         (document.querySelector('button.sendbtn') as HTMLButtonElement).click();

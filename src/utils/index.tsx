@@ -32,3 +32,20 @@ export const stringToId = (str: string) => {
 export const randomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+const isSpintax = (str: string) => /{(?:[^{}|]+\|?)+}/g.test(str);
+
+const getSpintaxItems = (str: string) => str.replace(/[{}]/g, '').split('|');
+
+export const stringFromSpintax = (input: string) => {
+    if (!isSpintax(input)) return input;
+
+    const matched = input.split(
+        /(?<={(?:[^{}|]+\|?)+})|(?={(?:[^{}|]+\|?)+})/g
+    );
+    return matched.reduce((final, item) => {
+        if (!isSpintax(item)) return final.concat(item);
+        const items = getSpintaxItems(item);
+        return final.concat(items[Math.floor(Math.random() * items.length)]);
+    }, '');
+};
